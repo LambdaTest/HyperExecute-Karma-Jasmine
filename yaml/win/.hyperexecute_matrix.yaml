@@ -1,0 +1,19 @@
+---
+version: "0.1"
+matrix:
+  os: [win]
+  files: ["test/test.js", "test/test2.js"]
+runson: ${matrix.os}
+pre:
+  - npm install package.json
+  - npm install karma
+  - npm install karma-jasmine
+  - npm install mocha
+  - npm install karma-mocha-reporter
+  - npm install karma-webdriver-launcher
+  - npm fund
+cacheKey: '{{ checksum "package-lock.json" }}'
+cacheDirectories:
+  - node_modules
+testSuites:
+  - env KARMA_SPECS="$files" ./node_modules/.bin/karma start karma.conf.js --single-run

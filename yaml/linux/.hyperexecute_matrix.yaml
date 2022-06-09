@@ -1,0 +1,21 @@
+---
+version: "0.1"
+matrix:
+  os: [linux]
+  files: ["test/test.js", "test/test2.js"]
+runson: ${matrix.os}
+pre:
+  - sudo rm -rf /usr/bin/java
+  - sudo ln -s /usr/lib/jvm/temurin-8-jdk-amd64/bin/java /usr/bin/java
+  - npm install package.json
+  - npm install karma
+  - npm install karma-jasmine
+  - npm install mocha
+  - npm install karma-mocha-reporter
+  - npm install karma-webdriver-launcher
+  - npm fund
+cacheKey: '{{ checksum "package-lock.json" }}'
+cacheDirectories:
+  - node_modules
+testSuites:
+  - env KARMA_SPECS="$files" ./node_modules/.bin/karma start karma.conf.js --single-run
